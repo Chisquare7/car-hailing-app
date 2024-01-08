@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+	font-family: "Inter", sans-serif;
+
+	--primary-color: #0a111f;
+	--main-text-color: #fff;
+	--secondary-color: #fca311;
+	--button-bg-color: #1fc77e;
+	--input-field-color: #08090a;
+}
+
+/* Global section */
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	text-decoration: none;
+	list-style: none;
+}
+
+img {
+	max-width: 100%;
+}
+
+body {
+	background-color: var(--primary-color);
+    color: var(--main-text-color);
+}
+
+.overall {
+	width: 90%;
+	max-width: 1280px;
+	margin: 3em auto;
+}
+
+.mainHeader {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.subHead {
+    margin-top: .5em;
+}
+
+.subHead > p {
+    color: var(--secondary-color);
+}
+
+.labelContainer {
+	display: flex;
+	flex-direction: column;
+	font-size: 1.125rem;
+	font-weight: 500;
+	line-height: 1.25rem;
+	margin: .5em 0em;
+}
+
+.inputField {
+	padding: 0.625em 0.875em;
+	outline: none;
+	border-radius: 0.5rem;
+	font-size: 1rem;
+	color: var(--input-field-color);
+	font-weight: 400;
+	line-height: 1.5rem;
+	margin-top: 0.3em;
+}
+
+.actButton {
+    width: 100%;
+    color: var(--primary-color);
+	background-color: var(--button-bg-color);
+	margin-top: 1em;
+	padding: 0.875em 0.875em;
+	border: none;
+	border-radius: 0.5rem;
+	outline: none;
+	font-size: 1.125rem;
+	font-weight: 600;
+	line-height: 1.5rem;
+	cursor: pointer;
+}
+
+.regButton {
+    color: var(--primary-color);
+	background-color: var(--secondary-color);
+}
+
+.tripLists {
+    margin: 1.5em 0em 1em;
+    font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.5rem;
+}
+
+.customerDetails {
+    margin-top: 2em;
+}
+
+.tripHead {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.notificationBox {
+    min-height: 70vh;
+    border: 1px solid lightgray;
+    border-radius: 0.5rem;
+    padding: .5em;
+}
+
+/* Styling of innerHTML */
+
+.customContainer {
+    padding: .5em;
+    border: 1px solid var(--secondary-color);
+    margin-top: 1em;
+}
+
+.customContainer .customHeader {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-size: 1.125rem;
+	font-weight: 600;
+	line-height: 1.5rem;
+}
+
+.customContainer .customContent {
+    background-color: var(--primary-color);
+    color: var(--main-text-color);
+}
+
+.customContent .customTitle {
+    font-size: 20rem;
+	font-weight: 500;
+	line-height: 1.5rem;
+    margin-top: 1em;
+}
+
+.customContent .customInfo {
+    font-size: .88rem;
+	font-weight: 500;
+	line-height: 1.5rem;
+    margin-top: 1em;
+}
+
+.customContent .buttonFlex {
+    display: flex;
+    align-items: center;
+    width: 60%;
+}
+
+.customButton + .customButton {
+    margin-left: 1em;
+}

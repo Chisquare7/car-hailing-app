@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="/style.css" />
+		<title>Customer Dashboard</title>
+	</head>
+	<body>
+		<div class="overall">
+			<div class="mainHeader">
+				<h1>Customer Dashboard</h1>
+				<div class="subHead">
+					<p><em>Ride-hailing - get to your ride</em></p>
+				</div>
+			</div>
+			<form id="registrationForm" action="">
+				<label for="name" class="labelContainer inputNameFlex">
+					Username:
+					<input
+						type="text"
+						id="name"
+						name="name"
+						placeholder="Enter your First Name"
+						class="inputField"
+					/>
+				</label>
+
+				<button id="actionButton" class="actButton" type="submit">Get Started</button>
+			</form>
+
+			<form id="customerRequestForm" action="" class="customerDetails">
+				<h2><em class="tripHead">Trip Details</em></h2>
+				<label for="currentLocation" class="labelContainer inputNameFlex">
+					Current Location:
+					<input
+						type="text"
+						id="currentLocation"
+						name="currentLocation"
+						placeholder="Enter your current location"
+						value=""
+						class="inputField"
+					/>
+				</label>
+				<label for="yourDestination" class="labelContainer inputNameFlex">
+					Destination:
+					<input
+						type="text"
+						id="yourDestination"
+						name="yourDestination"
+						placeholder="Where is your destination"
+						value=""
+						class="inputField"
+					/>
+				</label>
+				<label for="yourPrice" class="labelContainer inputNameFlex">
+					Price:
+					<input
+						type="text"
+						id="yourPrice"
+						name="yourPrice"
+						placeholder="Enter your price"
+						value=""
+						class="inputField"
+					/>
+				</label>
+
+				<button type="submit" id="requestButton" class="actButton regButton">Find Driver</button>
+			</form>
+			<h3 class="tripLists">Ride Lists:</h3>
+			<div id="bookingsContainer" class="notificationBox"></div>
+		</div>
+	</body>
+
+	<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+	<script>
+		const socket = io("http://localhost:4550");
+
+		const registrationForm = document.getElementById("registrationForm");
+		const Username = document.getElementById("name");
+		const customerOrderForm = document.getElementById("customerRequestForm");
+		const bookingsContainer = document.getElementById("bookingsContainer");
+
+		registrationForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+			socket.emit("join", "sender", `Customer ${Username.value}`);
+		});
+
+		socket.on("senderRegistered", (data) => {
+			localStorage.setItem(`sender - ${socket.id}`, data.sender.id);
+			console.log("Customer/Sender ID saved");
+		});
+
+		customerOrderForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const currentLocation = event.target[0].value;
+			const yourDestination = event.target[1].value;
+			const yourPrice = event.target[2].value;
+			const customerId = localStorage.getItem(`sender - ${socket.id}`);
+
+			socket.emit("requestOrder", {
+				currentLocation,
+				yourDestination,
+				yourPrice,
+				customerId,
+			});
+		});
+
+		socket.on("orderAccepted", (data) => {
+			const div = document.createElement("div");
+
+			div.innerHTML = `<div class="customContainer">
+            <h5 class="customHeader">Ride Status</h5>
+            <div class="customContent">
+                <h5 class="customTitle">${data.order.driver.name} has accepted your trip request. Driver is on the way.</h5>
+                <p class="customInfo">Status: ${data.order.status}</p>
+                <p class="customInfo">Current Location: ${data.order.currentLocation}</p>
+                <p class="customInfo">Destination: ${data.order.yourDestination}</p>
+                <p class="customInfo">Price: ${data.order.yourPrice} Naira</p>
+            </div>
+            </div>`;
+
+			bookingsContainer.appendChild(div);
+		});
+
+		socket.on("timedOutOrder", (data) => {
+			console.log(data);
+			const bookingsContainer = document.getElementById("bookingsContainer");
+
+			const div = document.createElement("div");
+			div.id = `${data.order.id}-expiredOrder`;
+
+			div.innerHTML = `<div class="customContainer">
+				<h5 class="customHeader">Oops! No Driver was available for your trip. Please, make a new request</h5>
+				<div class="customContent">
+					<h5 class="customTitle">Trip Status: ${data.order.status}</h5>
+					<p class="customInfo">Your Current Location: ${data.order.currentLocation}</p>
+					<p class="customInfo">Your Destination: ${data.order.yourDestination}</p>
+					<p class="customInfo">Price Inputted: ${data.order.yourPrice} Naira</p>
+				</div>
+				</div>`;
+
+			bookingsContainer.appendChild(div);
+		});
+
+		socket.on("tripCompleted", (data) => {
+			console.log(data);
+
+			const div = document.createElement("div");
+
+			div.innerHTML = `<div class="customContainer">
+				<h5 class="customHeader">Trip Completion</h5>
+				<div class="customContent">
+					<h5 class="customTitle">Your ride trip with ${data.order.driver.name} is completed. Thank You for Patronizing!</h5>
+					<p class="customInfo">Your Pickup Location: ${data.order.currentLocation}</p>
+					<p class="customInfo">Your Destination: ${data.order.yourDestination}</p>
+					<p class="customInfo">Your Trip Cost: ${data.order.yourPrice} Naira</p>
+				</div>
+				</div>`;
+
+			bookingsContainer.appendChild(div);
+		});
+	</script>
+</html>

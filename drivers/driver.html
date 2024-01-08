@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="/style.css" />
+		<title>Driver Dashboard</title>
+	</head>
+	<body>
+		<div class="overall">
+			<div class="mainHeader">
+				<h1>Driver Dashboard</h1>
+				<div class="subHead">
+					<p><em>Ride-hailing - connect with your client</em></p>
+				</div>
+			</div>
+			<form id="registrationForm" action="">
+				<label for="name" class="labelContainer inputNameFlex">
+					Username:
+					<input
+						type="text"
+						id="name"
+						name="name"
+						placeholder="Enter your First Name"
+						class="inputField"
+					/>
+				</label>
+
+				<button id="actionButton" class="actButton" type="submit">Get Started</button>
+			</form>
+
+			<h3 class="tripLists">Ride Bookings:</h3>
+			<div id="bookingsContainer" class="notificationBox"></div>
+		</div>
+	</body>
+
+	<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+	<script>
+		const socket = io("http://localhost:4550");
+
+		const registrationForm = document.getElementById("registrationForm");
+		const Username = document.getElementById("name");
+		const bookingsContainer = document.getElementById("bookingsContainer");
+
+		registrationForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+			localStorage.setItem(`sender-${socket.id}`, socket);
+			socket.emit("join", "driver", `Driver ${Username.value}`);
+		});
+
+		socket.on("driverRegistered", (data) => {
+			localStorage.setItem(`driver - ${socket.id}`, data.driver.id);
+			console.log("Customer/Driver ID saved");
+		});
+
+		// Implement a function to activate a notification to all available drivers once a trip request is sent by a sender
+
+		socket.on("orderRequested", (order) => {
+			console.log(order);
+
+			const div = document.createElement("div");
+			div.id = `${order.id}-notifyContainer`;
+
+			div.innerHTML = `<div class="customContainer">
+					<h3 class="customHeader">Ride Booking</h3>
+					<div class="customContent">
+						<h4 class="customTitle">A ride requested by ${order.sender.name}</h4>
+						<p class="customInfo">Customer Current Location: ${order.currentLocation}</p>
+						<p class="customInfo">Destination: ${order.yourDestination}</p>
+						<p class="customInfo">Price: ${order.yourPrice} Naira</p>
+						<div class="buttonFlex">
+							<button id="${order.id}-acceptOrder" href="#" class="customButton btnGreen">Accept Trip</button>
+							<button id="${order.id}-rejectOrder" href="#" class="customButton btnRed">Reject Trip</button>
+						</div>
+					</div>
+
+				</div>`;
+
+			bookingsContainer.appendChild(div);
+
+			const confirmOrderButton = document.getElementById(
+				`${order.id}-acceptOrder`
+			);
+			const rejectOrderButton = document.getElementById(
+				`${order.id}-rejectOrder`
+			);
+
+			setTimeout(() => {
+				if (
+					confirmOrderButton.innerHTML != "Accepted" &&
+					rejectOrderButton != "Rejected"
+				) {
+					div.innerHTML = "";
+				}
+			}, 60000);
+
+			confirmOrderButton.addEventListener("click", () => {
+				const driverId = localStorage.getItem(`driver - ${socket.id}`);
+				const orderId = order.id;
+
+				socket.emit("acceptOrder", orderId, driverId);
+			});
+
+			rejectOrderButton.addEventListener("click", () => {
+				const driverId = localStorage.getItem(`driver - ${socket.id}`);
+				const orderId = order.id;
+
+				socket.emit("rejectOrder", orderId, driverId);
+			});
+		});
+
+		// Implement a function to activate a notification to the driver that accepted the trip request
+
+		socket.on("orderAccepted", (data) => {
+			console.log(data.order);
+
+			const notifyContainer = document.getElementById(
+				`${data.order.id}-notifyContainer`
+			);
+			const div2 = document.createElement("div");
+
+			div2.innerHTML = `<div  class="customContainer">
+					<h5 class="customHeader">Ride Status </h5>
+					<div class="customContent">
+							<h5 class="customTitle">${data.order.sender.name} is requesting a ride</h5>
+							<p class="customInfo">Current Location: ${data.order.currentLocation}</p>
+							<p class="customInfo">Destination: ${data.order.yourDestination}</p>
+							<p class="customInfo">Price: N${data.order.yourPrice}</p>
+							<div class="buttonFlex">
+								<button id="${data.order.id}-acceptOrder" href="#" disabled>Trip Accepted</button>
+								<button id="${data.order.id}-finishRide" href="#" >Finish Trip</button>
+							</div>	
+						</div>
+					</div>`;
+
+			bookingsContainer.replaceChild(div2, notifyContainer);
+
+			// Implement event listener for finish trip button
+
+			const finishTripButton = document.getElementById(
+				`${data.order.id}-finishRide`
+			);
+
+			finishTripButton.addEventListener("click", () => {
+				const driverId = localStorage.getItem(`driver - ${socket.id}`);
+				const orderId = data.order.id;
+
+				socket.emit("completeTripRoute", orderId, driverId);
+			});
+		});
+
+		// Implement a function to activate a notification to other drivers once a trip request is accepted by a driver
+
+		socket.on("unpickedOrder", (data) => {
+			console.log(data);
+
+			const notifyContainer = document.getElementById(
+				`${data.order.id}-notifyContainer`
+			);
+			const bookingsContainer = document.getElementById("bookingsContainer");
+
+			const div2 = document.createElement("div");
+
+			div2.innerHTML = `<div  class="customContainer">
+				<h5 class="customHeader">Trip request taken by a driver</h5>
+				<div class="customContent">
+					<h5 class="customTitle">${data.order.sender.name} requested for a trip</h5>
+					<p class="customInfo">Current Location: ${data.order.currentLocation}</p>
+					<p class="customInfo">Destination: ${data.order.yourDestination}</p>
+					<p class="customInfo">Price: N${data.order.yourPrice}</p>
+					<button id="${data.order.id}-acceptOrder" href="#" disabled>Trip Taken</button>
+					</div>
+				</div>`;
+
+			bookingsContainer.replaceChild(div2, notifyContainer);
+		});
+
+		socket.on("tripCompleted", (data) => {
+			const finishTripButton = document.getElementById(
+				`${data.order.id}-finishRide`
+			);
+
+			if (finishTripButton) {
+				finishTripButton.disabled = true;
+				finishTripButton.innerHTML = "Completed";
+			}
+		});
+	</script>
+</html>
