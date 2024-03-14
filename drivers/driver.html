@@ -129,8 +129,8 @@
 							<p class="customInfo">Destination: ${data.order.yourDestination}</p>
 							<p class="customInfo">Price: N${data.order.yourPrice}</p>
 							<div class="buttonFlex">
-								<button id="${data.order.id}-acceptOrder" href="#" disabled>Trip Accepted</button>
-								<button id="${data.order.id}-finishRide" href="#" >Finish Trip</button>
+								<button id="${data.order.id}-acceptOrder" href="#" class="customButton btnTripAccept" disabled>Trip Accepted</button>
+								<button id="${data.order.id}-finishRide" href="#" class="customButton btnFinishTrip" >Finish Trip</button>
 							</div>	
 						</div>
 					</div>`;
@@ -170,7 +170,7 @@
 					<p class="customInfo">Current Location: ${data.order.currentLocation}</p>
 					<p class="customInfo">Destination: ${data.order.yourDestination}</p>
 					<p class="customInfo">Price: N${data.order.yourPrice}</p>
-					<button id="${data.order.id}-acceptOrder" href="#" disabled>Trip Taken</button>
+					<button id="${data.order.id}-acceptOrder" href="#" class="customButton btnTripTaken" disabled>Trip Taken</button>
 					</div>
 				</div>`;
 

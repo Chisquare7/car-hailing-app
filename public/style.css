@@ -1,13 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-	font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif;
 
-	--primary-color: #0a111f;
-	--main-text-color: #fff;
-	--secondary-color: #fca311;
-	--button-bg-color: #1fc77e;
-	--input-field-color: #08090a;
+  --primary-color: #0a111f;
+  --main-text-color: #fff;
+  --secondary-color: #fca311;
+  --button-bg-color: #1fc77e;
+  --button-rej-color: #964b00;
+  --input-field-color: #08090a;
+  --button-trip-color: #ffd600;
+  --button-finish-color: #03A9F4;
+  --button-taken-color: #FF6347;
 }
 
 /* Global section */
@@ -15,145 +19,174 @@
 *,
 *::before,
 *::after {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	text-decoration: none;
-	list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
 }
 
 img {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 body {
-	background-color: var(--primary-color);
-    color: var(--main-text-color);
+  background-color: var(--primary-color);
+  color: var(--main-text-color);
 }
 
 .overall {
-	width: 90%;
-	max-width: 1280px;
-	margin: 3em auto;
+  width: 90%;
+  max-width: 1280px;
+  margin: 3em auto;
 }
 
 .mainHeader {
-    text-align: center;
-    margin-bottom: 2em;
+  text-align: center;
+  margin-bottom: 2em;
 }
 
 .subHead {
-    margin-top: .5em;
+  margin-top: 0.5em;
 }
 
 .subHead > p {
-    color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 .labelContainer {
-	display: flex;
-	flex-direction: column;
-	font-size: 1.125rem;
-	font-weight: 500;
-	line-height: 1.25rem;
-	margin: .5em 0em;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  margin: 0.5em 0em;
 }
 
 .inputField {
-	padding: 0.625em 0.875em;
-	outline: none;
-	border-radius: 0.5rem;
-	font-size: 1rem;
-	color: var(--input-field-color);
-	font-weight: 400;
-	line-height: 1.5rem;
-	margin-top: 0.3em;
+  padding: 0.625em 0.875em;
+  outline: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--input-field-color);
+  font-weight: 400;
+  line-height: 1.5rem;
+  margin-top: 0.3em;
 }
 
 .actButton {
-    width: 100%;
-    color: var(--primary-color);
-	background-color: var(--button-bg-color);
-	margin-top: 1em;
-	padding: 0.875em 0.875em;
-	border: none;
-	border-radius: 0.5rem;
-	outline: none;
-	font-size: 1.125rem;
-	font-weight: 600;
-	line-height: 1.5rem;
-	cursor: pointer;
+  width: 100%;
+  color: var(--primary-color);
+  background-color: var(--button-bg-color);
+  margin-top: 1em;
+  padding: 0.875em 0.875em;
+  border: none;
+  border-radius: 0.5rem;
+  outline: none;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  cursor: pointer;
 }
 
 .regButton {
-    color: var(--primary-color);
-	background-color: var(--secondary-color);
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
 }
 
 .tripLists {
-    margin: 1.5em 0em 1em;
-    font-size: 1.5rem;
-	font-weight: 600;
-	line-height: 1.5rem;
+  margin: 1.5em 0em 1em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5rem;
 }
 
 .customerDetails {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 
 .tripHead {
-    color: var(--secondary-color);
-    font-weight: 600;
+  color: var(--secondary-color);
+  font-weight: 600;
 }
 
 .notificationBox {
-    min-height: 70vh;
-    border: 1px solid lightgray;
-    border-radius: 0.5rem;
-    padding: .5em;
+  min-height: 70vh;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  padding: 0.5em;
 }
 
 /* Styling of innerHTML */
 
 .customContainer {
-    padding: .5em;
-    border: 1px solid var(--secondary-color);
-    margin-top: 1em;
+  padding: 0.5em;
+  border: 1px solid var(--secondary-color);
+  margin-top: 1em;
 }
 
 .customContainer .customHeader {
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
-    font-size: 1.125rem;
-	font-weight: 600;
-	line-height: 1.5rem;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
 }
 
 .customContainer .customContent {
-    background-color: var(--primary-color);
-    color: var(--main-text-color);
+  background-color: var(--primary-color);
+  color: var(--main-text-color);
 }
 
 .customContent .customTitle {
-    font-size: 20rem;
-	font-weight: 500;
-	line-height: 1.5rem;
-    margin-top: 1em;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  margin-top: 1em;
 }
 
 .customContent .customInfo {
-    font-size: .88rem;
-	font-weight: 500;
-	line-height: 1.5rem;
-    margin-top: 1em;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  margin-top: 1em;
 }
 
 .customContent .buttonFlex {
-    display: flex;
-    align-items: center;
-    width: 60%;
+  display: flex;
+  align-items: center;
+  width: 80%;
 }
 
 .customButton + .customButton {
-    margin-left: 1em;
+  margin-left: 1em;
+}
+
+.customButton {
+  padding: 0.5em 1em;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 0.5rem;
+  font-weight: 700;
+}
+
+.btnGreen {
+  background-color: var(--button-bg-color);
+}
+
+.btnRed {
+  background-color: var(--button-rej-color);
+}
+
+.btnTripAccept {
+  background-color: var(--button-trip-color);
+}
+
+.btnFinishTrip {
+  background-color: var(--button-finish-color);
+}
+
+.btnTripTaken {
+	background-color: var(--button-taken-color);
 }
